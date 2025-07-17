@@ -89,7 +89,7 @@ plt.show()
       <b>Fig 2.</b> Displacement Plot
     </td>
     <td align="center">
-      <img src="assets/CNN.png" alt="CNN Input Plot" width="335">
+      <img src="assets/CNN.png" alt="CNN Input Plot" width="350">
       <br>
       <b>Fig 3.</b> CNN Input Image
     </td>
