@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CiliaTracks" 
+
+version = "0.0.1" 
+
+authors = [
+  { name="Nicholas Hadas", email="hadasn@wustl.edu" }, 
+]
+
+description = "A package for analyzing cilia-driven particle motility from TrackMate data."
+
+readme = "README.md"
+
+requires-python = ">=3.8"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pandas",
+    "numpy",
+    "matplotlib"
+]
+
+[project.urls]
+Homepage = "https://github.com/NicoHadas/CiliaTracks"
+Issues = "https://github.com/NicoHadas/CiliaTracks/issues"
