@@ -31,3 +31,8 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/NicoHadas/CiliaTracks"
 Issues = "https://github.com/NicoHadas/CiliaTracks/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["CiliaTracks*"]
+exclude = ["assets*"]
