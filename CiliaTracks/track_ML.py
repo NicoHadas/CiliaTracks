@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import numpy as np
 from .utils import circular_variance_from_angles, percent_densest_90, check_conversion_value
-from .constants import ALL_TRACK_COLUMNS, ALL_SPOT_COLUMNS, Track_columns_for_conversion, Spot_columns_for_conversion
+from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
 def track_ML(Tracks, Spots, Conversion=None):
     """
@@ -22,7 +22,7 @@ def track_ML(Tracks, Spots, Conversion=None):
     Tracks : str
         Path to track_statistics CSV.
     Spots : str
-        Path to spot_statistics CSV.
+        Path to spots_statistics CSV.
     Conversion : float or None
         Unit conversion factor (e.g., pixels to micrometers).
     
@@ -43,32 +43,32 @@ def track_ML(Tracks, Spots, Conversion=None):
     check_conversion_value(Conversion)
 
     # Load TrackMate data
-    spot_stats = pd.read_csv(Tracks, skiprows=[1, 2, 3]) 
-    track_stats = pd.read_csv(Spots, skiprows=[1, 2, 3]) 
+    track_stats = pd.read_csv(Tracks, skiprows=[1, 2, 3]) 
+    spots_stats = pd.read_csv(Spots, skiprows=[1, 2, 3]) 
 
     ## -- Checks --
     # Missing required columns
     missing_track_cols = [col for col in ALL_TRACK_COLUMNS if col not in track_stats.columns]
-    missing_spots_cols = [col for col in ALL_SPOT_COLUMNS if col not in spot_stats.columns]
+    missing_spots_cols = [col for col in ALL_SPOTS_COLUMNS if col not in spots_stats.columns]
     if missing_track_cols:
         raise ValueError(f"Missing required columns in Tracks CSV: {missing_track_cols}")
     if missing_spots_cols:
         raise ValueError(f"Missing required columns in Spots CSV: {missing_spots_cols}")
     
-    ## -- Spot Processing -- 
+    ## -- Spots Processing -- 
 
     # Convert units if needed
     if isinstance(Conversion, (int, float)): 
-        spot_stats[Spot_columns_for_conversion] = spot_stats[Spot_columns_for_conversion] * Conversion
+        spots_stats[Spots_columns_for_conversion] = spots_stats[Spots_columns_for_conversion] * Conversion
 
-    # Keep only first and last Frame for every TRACK_ID in the spot_statistics table
-    spot_stats = spot_stats.sort_values(by=['TRACK_ID', 'FRAME'])
-    spot_stats = spot_stats.groupby('TRACK_ID').apply(lambda x: x.iloc[[0, -1]])
-    spot_stats = spot_stats.reset_index(drop=True)
+    # Keep only first and last Frame for every TRACK_ID in the spots_statistics table
+    spots_stats = spots_stats.sort_values(by=['TRACK_ID', 'FRAME'])
+    spots_stats = spots_stats.groupby('TRACK_ID', group_keys=False).apply(lambda x: x.iloc[[0, -1]])
+    spots_stats = spots_stats.reset_index(drop=True)
 
     # Split into two new tables: First Frame, Last Frame
-    first_frame = spot_stats.drop_duplicates(subset='TRACK_ID', keep='first')
-    last_frame = spot_stats.drop_duplicates(subset='TRACK_ID', keep='last')
+    first_frame = spots_stats.drop_duplicates(subset='TRACK_ID', keep='first')
+    last_frame = spots_stats.drop_duplicates(subset='TRACK_ID', keep='last')
 
     ## -- Track Processing --
     
@@ -98,14 +98,16 @@ def track_ML(Tracks, Spots, Conversion=None):
     track_stats['ANGLE_DEGREES'] = np.degrees(track_stats['angle_radians'])
 
     # Keep only relevant columns
-    track_stats = [[ 'TRACK_DISPLACEMENT','TRACK_MEAN_SPEED','TRACK_MAX_SPEED','TRACK_MIN_SPEED',
-                    'TOTAL_DISTANCE_TRAVELED','MAX_DISTANCE_TRAVELED','MEAN_STRAIGHT_LINE_SPEED',
-                    'CONFINEMENT_RATIO','LINEARITY_OF_FORWARD_PROGRESSION','MEAN_DIRECTIONAL_CHANGE_RATE',
-                    'ANGLE_DEGREES']]
+    cols = ['TRACK_DISPLACEMENT','TRACK_MEAN_SPEED','TRACK_MAX_SPEED','TRACK_MIN_SPEED',
+            'TOTAL_DISTANCE_TRAVELED','MAX_DISTANCE_TRAVELED','MEAN_STRAIGHT_LINE_SPEED',
+            'CONFINEMENT_RATIO','LINEARITY_OF_FORWARD_PROGRESSION','MEAN_DIRECTIONAL_CHANGE_RATE']
 
     ## -- Create a DataFrame for the sample --
-    df = pd.DataFrame(track_stats.mean()).T
+
+    mean_series = track_stats[cols].mean()
+    df = mean_series.to_frame().T
     df.insert(0, "Sample", "Sample1")
+
 
     # Calculate mean displacement
     displacement = np.array(track_stats['TRACK_DISPLACEMENT'])

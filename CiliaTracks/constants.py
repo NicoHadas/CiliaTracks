@@ -2,9 +2,9 @@
 Constants defining required columns and conversion targets for TrackMate CSV data.
 
 - ALL_TRACK_COLUMNS: List of all expected columns in track statistics CSV.
-- ALL_SPOT_COLUMNS: List of all expected columns in spot statistics CSV.
+- ALL_SPOTS_COLUMNS: List of all expected columns in spots statistics CSV.
 - Track_columns_for_conversion: Subset of track columns that require unit conversion.
-- Spot_columns_for_conversion: Subset of spot columns that require unit conversion.
+- Spots_columns_for_conversion: Subset of spots columns that require unit conversion.
 """
 
 
@@ -39,7 +39,7 @@ ALL_TRACK_COLUMNS = [
     'MEAN_DIRECTIONAL_CHANGE_RATE'
 ]
 
-ALL_SPOT_COLUMNS = [
+ALL_SPOTS_COLUMNS = [
     'TRACK_ID', 'FRAME', 'POSITION_T',
     'POSITION_X', 'POSITION_Y', 'POSITION_Z', 'RADIUS'
 ]
@@ -49,4 +49,4 @@ Track_columns_for_conversion = ['TRACK_DISPLACEMENT','TRACK_X_LOCATION','TRACK_Y
         'TRACK_MAX_SPEED','TRACK_MIN_SPEED','TRACK_MEDIAN_SPEED','TRACK_STD_SPEED','TOTAL_DISTANCE_TRAVELED',
         'MAX_DISTANCE_TRAVELED','MEAN_STRAIGHT_LINE_SPEED']
 
-Spot_columns_for_conversion = ['POSITION_X','POSITION_Y','POSITION_Z','RADIUS']
+Spots_columns_for_conversion = ['POSITION_X','POSITION_Y','POSITION_Z','RADIUS']

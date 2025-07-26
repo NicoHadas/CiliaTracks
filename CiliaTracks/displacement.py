@@ -14,7 +14,7 @@ import numpy as np
 import statistics
 from matplotlib import cm
 from .utils import circular_variance_from_angles, mean_angle, percent_densest_90, check_conversion_value
-from .constants import ALL_TRACK_COLUMNS, ALL_SPOT_COLUMNS, Track_columns_for_conversion, Spot_columns_for_conversion
+from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
 def displacement(Tracks, Spots, Conversion=None):
     """
@@ -30,7 +30,7 @@ def displacement(Tracks, Spots, Conversion=None):
         Path to the track_statistics CSV file exported from TrackMate.
 
     Spots : str
-        Path to the spot_statistics CSV file exported from TrackMate.
+        Path to the spots_statistics CSV file exported from TrackMate.
 
     Conversion : float, optional
         Unit conversion factor to apply to all distance values (e.g., pixels to microns).
@@ -53,32 +53,32 @@ def displacement(Tracks, Spots, Conversion=None):
     check_conversion_value(Conversion)
 
     # Load TrackMate data
-    spot_stats = pd.read_csv(Tracks, skiprows=[1, 2, 3]) 
-    track_stats = pd.read_csv(Spots, skiprows=[1, 2, 3]) 
+    track_stats = pd.read_csv(Tracks, skiprows=[1, 2, 3]) 
+    spots_stats = pd.read_csv(Spots, skiprows=[1, 2, 3]) 
 
     ## -- Checks --
     # Missing required columns
     missing_track_cols = [col for col in ALL_TRACK_COLUMNS if col not in track_stats.columns]
-    missing_spots_cols = [col for col in ALL_SPOT_COLUMNS if col not in spot_stats.columns]
+    missing_spots_cols = [col for col in ALL_SPOTS_COLUMNS if col not in spots_stats.columns]
     if missing_track_cols:
         raise ValueError(f"Missing required columns in Tracks CSV: {missing_track_cols}")
     if missing_spots_cols:
         raise ValueError(f"Missing required columns in Spots CSV: {missing_spots_cols}")
     
-    ## -- Spot Processing -- 
+    ## -- Spots Processing -- 
 
     # Convert units if needed
     if isinstance(Conversion, (int, float)): 
-        spot_stats[Spot_columns_for_conversion] = spot_stats[Spot_columns_for_conversion] * Conversion
+        spots_stats[Spots_columns_for_conversion] = spots_stats[Spots_columns_for_conversion] * Conversion
 
-    # Keep only first and last Frame for every TRACK_ID in the spot_statistics table
-    spot_stats = spot_stats.sort_values(by=['TRACK_ID', 'FRAME'])
-    spot_stats = spot_stats.groupby('TRACK_ID').apply(lambda x: x.iloc[[0, -1]])
-    spot_stats = spot_stats.reset_index(drop=True)
+    # Keep only first and last Frame for every TRACK_ID in the spots_statistics table
+    spots_stats = spots_stats.sort_values(by=['TRACK_ID', 'FRAME'])
+    spots_stats = spots_stats.groupby('TRACK_ID', group_keys=False).apply(lambda x: x.iloc[[0, -1]])
+    spots_stats = spots_stats.reset_index(drop=True)
 
     # Split into two new tables: First Frame, Last Frame
-    First_FRAME = spot_stats.drop_duplicates(subset='TRACK_ID', keep='first')
-    Last_FRAME = spot_stats.drop_duplicates(subset='TRACK_ID', keep='last')
+    First_FRAME = spots_stats.drop_duplicates(subset='TRACK_ID', keep='first')
+    Last_FRAME = spots_stats.drop_duplicates(subset='TRACK_ID', keep='last')
 
     ## -- Track Processing --
     
@@ -183,16 +183,14 @@ def displacement(Tracks, Spots, Conversion=None):
     )
 
     # Set the maximum radius to fit all data
-    ax.set_rmax(track_stats['TRACK_DISPLACEMENT'].max() + 50)  # Adjust if needed
+    ax.set_rmax(track_stats['TRACK_DISPLACEMENT'].max() + 50)  
     ax.set_rlabel_position(80)
 
     # Set the title and labels for the polar plot
-    ax.set_title("Track Displacement", color='white', fontsize = 20)
+    ax.set_title("Track Displacement", color='white', fontsize = 20, pad = 30)
 
     # Set  grid and axis labels to white
     ax.grid(color='white', linestyle='--', linewidth=0.5)
     ax.tick_params(axis='both', labelcolor='white')
-
-    # Show the plot
-    plt.show()
+    plt.close(fig)
     return fig
