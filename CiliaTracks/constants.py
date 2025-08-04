@@ -5,6 +5,7 @@ Constants defining required columns and conversion targets for TrackMate CSV dat
 - ALL_SPOTS_COLUMNS: List of all expected columns in spots statistics CSV.
 - Track_columns_for_conversion: Subset of track columns that require unit conversion.
 - Spots_columns_for_conversion: Subset of spots columns that require unit conversion.
+- Feature_Order: Correct feature order for XGBoost prediction
 """
 
 
@@ -44,9 +45,13 @@ ALL_SPOTS_COLUMNS = [
     'POSITION_X', 'POSITION_Y', 'POSITION_Z', 'RADIUS'
 ]
 
-
 Track_columns_for_conversion = ['TRACK_DISPLACEMENT','TRACK_X_LOCATION','TRACK_Y_LOCATION','TRACK_Z_LOCATION','TRACK_MEAN_SPEED',
         'TRACK_MAX_SPEED','TRACK_MIN_SPEED','TRACK_MEDIAN_SPEED','TRACK_STD_SPEED','TOTAL_DISTANCE_TRAVELED',
         'MAX_DISTANCE_TRAVELED','MEAN_STRAIGHT_LINE_SPEED']
 
 Spots_columns_for_conversion = ['POSITION_X','POSITION_Y','POSITION_Z','RADIUS']
+
+Feature_Order = ['TRACK_DISPLACEMENT', 'TRACK_MEAN_SPEED', 'TRACK_MAX_SPEED', 'TRACK_MIN_SPEED',
+            'TOTAL_DISTANCE_TRAVELED', 'MAX_DISTANCE_TRAVELED', 'CONFINEMENT_RATIO',
+            'MEAN_STRAIGHT_LINE_SPEED', 'LINEARITY_OF_FORWARD_PROGRESSION',
+            'MEAN_DIRECTIONAL_CHANGE_RATE', 'CIRCULAR_VARIANCE', 'PERCENT_IN_DENSEST_90']

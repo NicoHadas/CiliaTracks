@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/CiliaTracks.svg)](https://badge.fury.io/py/CiliaTracks)
 [![Python Version](https://img.shields.io/pypi/pyversions/CiliaTracks.svg)](https://pypi.org/project/CiliaTracks)
 
-A set of computational tools for the visualization and quantitaive analysis of cilia-driven particle movement, designed to process TrackMate data from high-speed video microscopy of cultured airway cells.
+A set of computational tools for the visualization and quantitative analysis of cilia-driven particle movement, designed to process TrackMate data from high-speed video microscopy of cultured airway cells.
 
 This package provides the functions to analyze and visualize data from TrackMate exports, complementing the research detailed in our publication on Primary Ciliary Dyskinesia (PCD).
 

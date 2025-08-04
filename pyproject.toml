@@ -25,7 +25,12 @@ classifiers = [
 dependencies = [
     "pandas",
     "numpy",
-    "matplotlib"
+    "matplotlib",
+    "joblib",
+    "xgboost",
+    "torch",
+    "torchvision",
+    "Pillow"
 ]
 
 [project.urls]

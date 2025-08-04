@@ -3,6 +3,10 @@ Utility functions for CiliaTracks
 """
 
 import numpy as np
+from io import BytesIO
+from PIL import Image
+from torchvision import transforms
+import torch
 
 def circular_variance_from_angles(angles_rad):
     """
@@ -43,6 +47,7 @@ def mean_angle(angles_rad):
     """
     mean_cos_theta = np.mean(np.cos(angles_rad))
     mean_sin_theta = np.mean(np.sin(angles_rad))
+    
     return np.arctan2(mean_sin_theta, mean_cos_theta)
 
 
@@ -73,6 +78,7 @@ def percent_densest_90(angles2):
         else:
             count = np.sum((sorted_angles >= start) | (sorted_angles <= end))  
         best_count = max(best_count, count)
+
     return best_count / len(angles2) * 100
 
 
@@ -111,4 +117,34 @@ def check_conversion_value(Conversion):
     """
     if Conversion is not None and not is_numeric(Conversion):
         raise TypeError("Conversion must be a number (int or float) or None.")
+    
+def fig_to_tensor(fig):
+    """
+    Converts a Matplotlib figure to a pre-processed PyTorch tensor.
+
+    This function takes a figure, saves it to an in-memory buffer,
+    and processes it into the correct tensor format for CNN input.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure
+        The figure to convert.
+
+    Returns
+    -------
+    torch.Tensor
+        The pre-processed image tensor.
+    """
+    buf = BytesIO()
+    fig.savefig(buf, format='png', bbox_inches='tight')
+    buf.seek(0)
+    image = Image.open(buf).convert('L')
+    preprocess = transforms.Compose([
+        transforms.Resize((500, 500)),
+        transforms.ToTensor()
+    ])
+    tensor = preprocess(image).unsqueeze(0)
+    buf.close()
+    
+    return tensor
 
