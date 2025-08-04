@@ -17,6 +17,7 @@ This package provides the functions to analyze and visualize data from TrackMate
 
 * **Standardized Image Generation for CNNs:** Produce normalized trajectory images suitable as direct input for our Convolutional Neural Network (CNN) model.
 
+* **Direct PCD Classification:** Make predictions on whether a sample is from a healthy control or a PCD patient using two pre-trained models: an XGBoost model for feature-based classification and a CNN for image-based classification.
 ---
 
 
@@ -72,6 +73,52 @@ plt.show()
 # fig.savefig('trajectory_plot.png', dpi=300, bbox_inches='tight')
 ```
 
+---
+
+### Prediction Examples
+
+The package includes pre-trained models to classify samples directly from your TrackMate data.
+
+### 1. XGBoost Model Prediction
+
+```python
+import CiliaTracks as CT
+
+# Define paths to your TrackMate CSV files
+tracks_file = 'path/to/your/Tracks.csv'
+spots_file = 'path/to/your/Spots.csv'
+conversion_factor = 0.65
+
+# Get a prediction from the XGBoost model
+CT.prediction_ML(
+    Tracks=tracks_file,
+    Spots=spots_file,
+    Conversion=conversion_factor
+)
+# Expected output:
+# Model Prediction: PCD
+# Model Confidence: 98.7%
+```
+### 2. CNN Model Prediction
+
+```python
+import CiliaTracks as CT
+
+# Define paths to your TrackMate CSV files
+tracks_file = 'path/to/your/Tracks.csv'
+spots_file = 'path/to/your/Spots.csv'
+conversion_factor = 0.65
+
+# Get a prediction from the CNN model
+CT.prediction_CNN(
+    Tracks=tracks_file,
+    Spots=spots_file,
+    Conversion=conversion_factor
+)
+# Expected output:
+# Model Prediction: Control
+# Model Confidence: 95.2%
+```
 ---
 
 ### Example Ouputs
