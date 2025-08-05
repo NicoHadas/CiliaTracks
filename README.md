@@ -18,6 +18,8 @@ This package provides the functions to analyze and visualize data from TrackMate
 * **Standardized Image Generation for CNNs:** Produce normalized trajectory images suitable as direct input for our Convolutional Neural Network (CNN) model.
 
 * **Direct PCD Classification:** Make predictions on whether a sample is from a healthy control or a PCD patient using two pre-trained models: an XGBoost model for feature-based classification and a CNN for image-based classification.
+
+* **Automated Fiji ImageJ Script:** This repostiory contains a Jython script that automates the entire particle tracking analysis workflow 
 ---
 
 
@@ -79,7 +81,7 @@ plt.show()
 
 The package includes pre-trained models to classify samples directly from your TrackMate data.
 
-### 1. XGBoost Model Prediction
+#### 1. XGBoost Model Prediction
 
 ```python
 import CiliaTracks as CT
@@ -99,7 +101,7 @@ CT.prediction_ML(
 # Model Prediction: PCD
 # Model Confidence: 98.7%
 ```
-### 2. CNN Model Prediction
+#### 2. CNN Model Prediction
 
 ```python
 import CiliaTracks as CT
@@ -144,6 +146,26 @@ CT.prediction_CNN(
 </table>
 
 ---
+
+### Automated Fiji/ImageJ Analysis Script
+
+This repository includes a Jython script that automates the entire TrackMate analysis process. This script will take a folder of raw AVI video files and generate the Tracks.csv and Spots.csv files required by the CiliaTracks Python package.
+
+#### How to Use the Script
+
+1. Download script: Find the script in the Fiji_Scripts folder of this repository. 
+2. Open the Script Editor in Fiji: In the main Fiji toolbar, navigate to File > New > Script
+3. Open the Script File: Select the script file you downloaded
+4. Run the Script: Click the "Run" button at the bottom of the editor
+5. Select Folders: 
+
+    a. Select the input folder containing your .avi video files
+
+    b. Select an output folder where the resulting .csv files will be saved.
+
+6. Click "OK" to start the batch processing. The script will analyze all videos in the input folder and save the results.
+
+
 
 ### How to Cite
 
