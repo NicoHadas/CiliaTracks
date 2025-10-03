@@ -57,6 +57,9 @@ def track_ML(Tracks, Spots, Conversion=None):
     
     ## -- Spots Processing -- 
 
+    # Normalize to first 445 frames
+    spots_stats = spots_stats[spots_stats["FRAME"] <= 445] 
+
     # Convert units if needed
     if isinstance(Conversion, (int, float)): 
         spots_stats[Spots_columns_for_conversion] = spots_stats[Spots_columns_for_conversion] * Conversion
@@ -71,6 +74,9 @@ def track_ML(Tracks, Spots, Conversion=None):
     last_frame = spots_stats.drop_duplicates(subset='TRACK_ID', keep='last')
 
     ## -- Track Processing --
+
+    # Normalize to first 445 frames
+    track_stats = track_stats[track_stats["TRACK_START"] <= 445] 
     
     # Convert units if needed 
     if isinstance(Conversion, (int, float)):

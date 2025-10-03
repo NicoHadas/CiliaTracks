@@ -61,6 +61,9 @@ def trajectory_CNN(Tracks, Spots, Conversion=None):
 
      ## -- Track Processing -- 
 
+    # Normalize to first 445 frames
+    track_stats = track_stats[track_stats["TRACK_START"] <= 445] 
+
     # Convert units if needed 
     if isinstance(Conversion, (int, float)):
         track_stats[Track_columns_for_conversion] = track_stats[Track_columns_for_conversion] * Conversion
@@ -74,6 +77,9 @@ def trajectory_CNN(Tracks, Spots, Conversion=None):
     track_stats2 = track_stats.copy()
 
     ## -- Spots Processing -- 
+
+    # Normalize to first 445 frames
+    spots_stats = spots_stats[spots_stats["FRAME"] <= 445] 
 
     # Convert units if needed
     if isinstance(Conversion, (int, float)): 
