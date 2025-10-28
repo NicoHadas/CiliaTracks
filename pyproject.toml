@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "CiliaTracks" 
 
-version = "1.0.0" 
+version = "1.1.0" 
 
 authors = [
   { name="Nicholas Hadas", email="hadasn@wustl.edu" }, 
@@ -14,6 +14,9 @@ authors = [
 description = "A package for analyzing cilia-driven particle motility from TrackMate data."
 
 readme = "README.md"
+
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 
 requires-python = ">=3.8"
 
