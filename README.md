@@ -40,7 +40,7 @@ pip install CiliaTracks
 To get the latest development version, you can install the package directly from this GitHub repository.
 
 ```bash
-pip install git+[https://github.com/NicoHadas/CiliaTracks.git](https://github.com/NicoHadas/CiliaTracks.git)
+pip install git+https://github.com/NicoHadas/CiliaTracks.git
 ```
 
 ---
