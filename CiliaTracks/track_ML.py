@@ -13,7 +13,7 @@ import numpy as np
 from .utils import circular_variance_from_angles, percent_densest_90, check_conversion_value
 from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
-def track_ML(Tracks, Spots, Conversion=None):
+def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
     """
     Extracts key track features from TrackMate data as a DataFrame for ML input.
     
@@ -23,13 +23,15 @@ def track_ML(Tracks, Spots, Conversion=None):
         Path to track_statistics CSV.
     Spots : str
         Path to spots_statistics CSV.
+    Track_Number: int
+        Number of tracks to be considered
     Conversion : float or None
         Unit conversion factor (e.g., pixels to micrometers).
     
     Returns:
     --------
     pandas.DataFrame
-        Single-row DataFrame with mean feature values for top 150 tracks,
+        Single-row DataFrame with mean feature values for the desired amount of tracks,
         including circular variance and percent in densest 90° window.
     """
     ## -- Checks --
@@ -85,8 +87,8 @@ def track_ML(Tracks, Spots, Conversion=None):
     # Sort by track quality
     track_stats = track_stats.sort_values(by='TRACK_MEAN_QUALITY', ascending=False)
 
-    # Take only the top 150 of tracks 
-    track_stats = track_stats[0:150]
+    # Take only the desired amount of tracks 
+    track_stats = track_stats[0:Track_Number]
 
 
     ## -- General Engineering --
