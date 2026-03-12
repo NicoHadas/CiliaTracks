@@ -13,7 +13,7 @@ import numpy as np
 from .utils import circular_variance_from_angles, percent_densest_90, check_conversion_value
 from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
-def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
+def track_ML(Tracks, Spots, Track_Number=150, Track_Quality = False, Track_Quality_Tier = "Top", Conversion=None):
     """
     Extracts key track features from TrackMate data as a DataFrame for ML input.
     
@@ -23,9 +23,18 @@ def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
         Path to track_statistics CSV.
     Spots : str
         Path to spots_statistics CSV.
-    Track_Number: int
+    Track_Number: int, default=150
         Number of tracks to be considered
-    Conversion : float or None
+    Track_Quality : bool, default=False
+        If True, enables track-quality tier selection (Top/Mid/Bottom) via Track_Quality_Tier
+    Track_Quality_Tier : {"Top","Mid","Bottom"}, default="Top"
+        Which quality tier to use when Track_Quality=True:
+        - "Top": highest-quality tracks (default behavior)
+        - "Good": The next N tracks by quality tracks after top
+        - "Mid": middle N tracks by quality rank
+        - "Bottom": lowest-quality tracks
+        Only valid when Track_Quality=True.
+    Conversion : float or None, default=None
         Unit conversion factor (e.g., pixels to micrometers).
     
     Returns:
@@ -41,6 +50,16 @@ def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
     if not os.path.isfile(Spots):
         raise FileNotFoundError(f"Spots file not found: {Spots}")
     
+    # Enforce tier validity rule
+    valid_tiers = {"Top", "Good", "Mid", "Bottom"}
+    if Track_Quality is False:
+        if Track_Quality_Tier != "Top":
+            raise ValueError("Track_Quality_Tier is only valid when Track_Quality=True. "
+                             "Set Track_Quality=True to use 'Good', 'Mid' or 'Bottom'.")
+    else:
+        if Track_Quality_Tier not in valid_tiers:
+            raise ValueError(f"Invalid Track_Quality_Tier='{Track_Quality_Tier}'. Must be one of {valid_tiers}.")
+
     # Conversion argument validity
     check_conversion_value(Conversion)
 
@@ -87,9 +106,41 @@ def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
     # Sort by track quality
     track_stats = track_stats.sort_values(by='TRACK_MEAN_QUALITY', ascending=False)
 
-    # Take only the desired amount of tracks 
-    track_stats = track_stats[0:Track_Number]
+    # Track_Number check
+    total_tracks = len(track_stats)
+    Track_Number = int(Track_Number)
+    if Track_Number <= 0:
+        raise ValueError("Track_Number must be a positive integer.")
+    if total_tracks == 0:
+        raise ValueError("No tracks available after filtering.")
+    if total_tracks < Track_Number:
+        Track_Number = total_tracks
 
+    # Take only the desired amount of tracks and apply quality tier if specified
+    if Track_Quality == False:
+        track_stats = track_stats.iloc[:Track_Number].copy()
+        tier_used = "Top"
+    else:
+        tier_used = Track_Quality_Tier
+
+        if Track_Quality_Tier == "Top":
+            track_stats = track_stats.iloc[:Track_Number].copy()
+
+        elif Track_Quality_Tier == "Bottom":
+            track_stats = track_stats.iloc[-Track_Number:].copy()
+        elif Track_Quality_Tier == "Good":
+            track_stats = track_stats.iloc[Track_Number: Track_Number * 2].copy()
+        elif Track_Quality_Tier == "Mid":
+            # Middle Track_Number tracks by quality rank
+            mid_start = (total_tracks // 2) - (Track_Number // 2)
+            mid_start = max(0, min(mid_start, total_tracks - Track_Number))
+            track_stats = track_stats.iloc[mid_start: mid_start + Track_Number].copy()
+
+    # Compute track quality scores
+    if Track_Quality:
+        mean_track_quality = float(track_stats["TRACK_MEAN_QUALITY"].mean())
+        median_track_quality = float(track_stats["TRACK_MEAN_QUALITY"].median())
+        tracks_used = int(len(track_stats))
 
     ## -- General Engineering --
 
@@ -116,6 +167,11 @@ def track_ML(Tracks, Spots, Track_Number=150,Conversion=None):
     df = mean_series.to_frame().T
     df.insert(0, "Sample", "Sample1")
 
+    if Track_Quality:
+        df["TRACKS_USED"] = tracks_used
+        df["TRACK_QUALITY_TIER"] = tier_used
+        df["MEAN_TRACK_QUALITY"] = mean_track_quality
+        df["MEDIAN_TRACK_QUALITY"] = median_track_quality
 
     # Calculate mean displacement
     displacement = np.array(track_stats['TRACK_DISPLACEMENT'])

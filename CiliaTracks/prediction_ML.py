@@ -44,7 +44,7 @@ def prediction_ML(Tracks, Spots, Conversion=None):
     # Run track_ML to get predictive features for sample
     with open(os.devnull, 'w') as devnull:
         with redirect_stdout(devnull):
-            feature_df = track_ML(Tracks, Spots, Conversion)
+            feature_df = track_ML(Tracks, Spots, Conversion, Track_Number=150, Track_Quality=False, Track_Quality_Tier="Top")
     
     input_data = feature_df[Feature_Order].values
 
