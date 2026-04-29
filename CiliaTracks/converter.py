@@ -1,10 +1,37 @@
+"""
+converter.py
+
+This module applies a unit conversion to TrackMate data and returns the converted data as CSV-formatted strings.
+"""
+
 import os 
 import pandas as pd
 import numpy as np
 from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
 def converter(Tracks, Spots, Conversion):
-    
+    """
+    Generates updated track_statistics and spots_statistics files based on a unit conversion. Useful for scaling
+    distance-based measurements from pixels to a physical unit like micrometers.
+
+    Parameters:
+    -----------
+    Tracks : str
+        Path to the track_statistics CSV file exported from TrackMate.
+
+    Spots : str
+        Path to the spots_statistics CSV file exported from TrackMate.
+
+    Conversion : float, optional
+        Unit conversion factor to apply to all distance values (e.g., pixels to microns).
+        If None, no conversion is applied.
+
+    Returns:
+    --------
+    tuple of str
+        A tuple containing two strings: the first is the converted tracks data in CSV format,
+        and the second is the converted spots data in CSV format.
+    """
     ## -- Checks --
     # File existence
     if not os.path.isfile(Tracks):
