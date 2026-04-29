@@ -15,7 +15,7 @@ from .utils import circular_variance_from_angles, mean_angle, percent_densest_90
 from .constants import ALL_TRACK_COLUMNS, ALL_SPOTS_COLUMNS, Track_columns_for_conversion, Spots_columns_for_conversion
 
 
-def trajectory(Tracks, Spots, Conversion=None):
+def trajectory(Tracks, Spots, Conversion=None, ax=None):
     """
     Generates a polar plot of trajectories from TrackMate data. Each track is normalized
     to start at an origin and overall track angles are centered around 0 degrees. Top 150 
@@ -33,6 +33,10 @@ def trajectory(Tracks, Spots, Conversion=None):
     Conversion : float, optional
         A unit conversion factor to apply to all distance values (e.g., pixel to micrometer).
         If None, no conversion is applied.
+
+    ax : matplotlib.axes._subplots.PolarAxesSubplot, optional
+        Polar axis to plot into.
+
 
     Returns:
     --------
@@ -142,7 +146,11 @@ def trajectory(Tracks, Spots, Conversion=None):
 
     ## -- Visualization --
     # Set up the plot
-    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw={'projection': 'polar'})
+    created_fig = ax is None
+    if created_fig:
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw={'projection': 'polar'})
+    else:
+        fig=ax.figure
 
     # Set the background color of plot to black
     fig.patch.set_facecolor('black')
@@ -218,7 +226,9 @@ def trajectory(Tracks, Spots, Conversion=None):
     # Set  grid and axis labels to white 
     ax.grid(True, color='white', linestyle='--', linewidth=0.5)
     ax.tick_params(axis='both', labelcolor='white')
-    plt.close(fig)
+
+    if created_fig:
+        plt.close(fig)
     return fig
 
 

@@ -53,6 +53,22 @@ def prediction_ML(Tracks, Spots, Conversion=None):
     with importlib.resources.path('CiliaTracks.models', 'tuned_xgboost_model.joblib') as model_path:
         xgboost_model = joblib.load(model_path)
 
+    # DEBUG: Confirm correct model is being loaded
+    print("\n===== MODEL DEBUG INFO =====")
+    print(f"Loaded model path: {model_path}")
+    print(f"Model type: {type(xgboost_model)}")
+
+    if hasattr(xgboost_model, "n_features_in_"):
+        print(f"Model expects {xgboost_model.n_features_in_} features")
+
+    if hasattr(xgboost_model, "feature_names_in_"):
+        print("Model feature names:")
+        print(list(xgboost_model.feature_names_in_))
+
+    print("Feature_Order used for prediction:")
+    print(list(Feature_Order))
+    print("================================\n")
+
     # Make Predictions
     prediction_idx = xgboost_model.predict(input_data)[0]
     probabilities = xgboost_model.predict_proba(input_data)[0]
