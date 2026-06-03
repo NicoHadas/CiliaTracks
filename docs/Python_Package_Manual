@@ -11,6 +11,15 @@
 3. [Generating raw data from Fiji ImageJ](#3-generating-raw-data-from-fiji-imagej-trackmate)  
 4. [Python package usage](#4-python-package-usage)  
    - [4.1 Core functions](#41-core-functions)  
+     - [4.1.1 converter()](#411-converter)  
+     - [4.1.2 trajectory()](#412-trajectory)  
+     - [4.1.3 displacement()](#413-displacement)  
+     - [4.1.4 speed()](#414-speed)  
+     - [4.1.5 track_ML()](#415-track_ml)  
+     - [4.1.6 prediction_ML()](#416-prediction_ml)  
+     - [4.1.7 trajectory_CNN()](#417-trajectory_cnn)  
+     - [4.1.8 prediction_CNN()](#418-prediction_cnn)  
+   - [4.2 Model extraction](#42-model-extraction)  
 5. [Website usage](#5-website-usage)  
    - [5.1 CiliaTracks Analysis](#51-ciliatracks-analysis)  
    - [5.2 CNN Model](#52-cnn-model)  
@@ -20,9 +29,9 @@
 
 ## 1 Overview
 
-CiliaTracks is a comprehensive Python package and dedicated website that enables clinicians and researchers to analyze cilia-driven particle motility and accurately predict PCD from HVSM data.
+CiliaTracks is a comprehensive Python package and dedicated application that enables clinicians and researchers to analyze cilia-driven particle motility and accurately predict PCD from HVSM data.
 
-Both platforms are operating-system independent, and can therefore be used on Windows, macOS and Linux systems.
+The Python package is operating-system independent, while a set of executable applications have been created for Windows, macOS and Linux systems. 
 
 ### 1.1 Python Package
 
@@ -34,29 +43,29 @@ The Python package contains the set of visualization, quantitative analysis and 
 - Direct PCD Classification: Make predictions on whether a sample is from a healthy control or a PCD patient using two pre-trained models: an XGBoost model for feature-based classification and a CNN for image-based classification.  
 - Automated Fiji ImageJ Script: The GitHub repository contains a Jython script that automates the entire particle tracking analysis workflow.  
 
-### 1.2 Website
+### 1.2 Applications
 
-The corresponding website provides an accessible and user-friendly alternative for applying the tools/functions in Python. Users can easily upload raw Fiji ImageJ TrackMate data to obtain diagnostic predictions and carry out trajectory analyses.
+The corresponding applications provide an accessible and user-friendly alternative for applying the tools/functions in Python. Users can easily upload raw Fiji ImageJ TrackMate data to obtain diagnostic predictions and carry out trajectory analyses.
 
 ---
 
 ## 2 Installation
 
-The website is hosted on ____________.
+The applications can be directly downloaded from Zenodo.
 
-The Python package can be installed in two ways. Please note that you must have Python installed to use the package. Python can be downloaded from their official site for your operating system.
+The Python package can be installed in two ways. Please note that you must have Python installed to use the package. Python can be downloaded from their official site for your operating system. 
 
 ### 2.1 Recommended Installation
 
 The easiest way to install the package is from the Python Package Index (PyPI). This will provide the latest stable release.
 
-pip install CiliaTracks
+`pip install CiliaTracks`
 
 ### 2.2 Install from GitHub directly
 
 To get the latest development version, you can install the package directly from the GitHub repository:
 
-git+https://github.com/NicoHadas/CiliaTracks.git
+`git+https://github.com/NicoHadas/CiliaTracks.git`
 
 ---
 
@@ -99,66 +108,149 @@ This reference guide provides a detailed description of the core functions avail
 
 #### 4.1.1 converter()
 
-CiliaTracks.converter(Tracks, Spots, Conversion)
+`CiliaTracks.converter(Tracks, Spots, Conversion)`
 
 Applies a unit conversion to TrackMate data and returns the converted data as CSV-formatted strings. This is useful for scaling distance-based measurements from pixels to a physical unit like micrometers.
 
-Parameters:
-- Tracks: str  
-  - The file path to the track_statistics.csv file exported from TrackMate.  
-- Spots: str  
-  - The file path to the spots_statistics.csv file exported from TrackMate.  
-- Conversion: float or int (optional)  
-  - The numerical conversion factor to apply to all distance and speed-related columns in the Tracks and Spots data.  
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file exported from TrackMate.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file exported from TrackMate.
+- `Conversion`: float or int (optional)
+  - The numerical conversion factor to apply to all distance and speed-related columns in the Tracks and Spots data.
 
-Returns:
-- tuple of str  
-  - A tuple containing two strings: the first is the converted tracks data in CSV format, and the second is the converted spots data in CSV format.  
+**Returns:**
+- `tuple of str`
+  - A tuple containing two strings: the first is the converted tracks data in CSV format, and the second is the converted spots data in CSV format.
 
 #### 4.1.2 trajectory()
 
-CiliaTracks.trajectory(Tracks, Spots, Conversion=None)
+`CiliaTracks.trajectory(Tracks, Spots, Conversion=None)`
 
 Generates a polar plot visualizing the complete trajectories of particles from TrackMate data. Each track is normalized to a common origin, and the overall plot is centered around the mean angle of all tracks. The top 150 tracks, sorted by quality, are plotted.
 
-Returns:
-- matplotlib.figure.Figure  
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
+
+**Returns:**
+- `matplotlib.figure.Figure`
+  - The figure object for the generated polar trajectory plot, which can be displayed or saved.
 
 #### 4.1.3 displacement()
 
-CiliaTracks.displacement(Tracks, Spots, Conversion=None)
+`CiliaTracks.displacement(Tracks, Spots, Conversion=None)`
 
-Generates a polar displacement plot from TrackMate data.
+Generates a polar displacement plot from TrackMate data. Each track is represented as an arrow from the origin, indicating its net movement direction and distance. The top 150 tracks, sorted by quality, are plotted and centered around the mean angle.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
+
+**Returns:**
+- `matplotlib.figure.Figure`
+  - The figure object for the generated polar displacement plot.
 
 #### 4.1.4 speed()
 
-CiliaTracks.speed(Tracks, Spots, Conversion=None)
+`CiliaTracks.speed(Tracks, Spots, Conversion=None)`
 
-Generates a polar plot of track speed vectors from TrackMate data.
+Generates a polar plot of track speed vectors from TrackMate data. Each track is represented by an arrow whose length corresponds to the track's mean straight-line speed. The top 150 tracks are processed and centered around the mean angle.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
+
+**Returns:**
+- `matplotlib.figure.Figure`
+  - The figure object for the generated polar speed vector plot.
 
 #### 4.1.5 track_ML()
 
-CiliaTracks.track_ML(Tracks, Spots, Conversion=None)
+`CiliaTracks.track_ML(Tracks, Spots, Conversion=None)`
 
-Extracts key track features from TrackMate data and returns them as a pandas DataFrame.
+Extracts key track features from TrackMate data and returns them as a pandas DataFrame. These features are designed for use as input to an XGBoost machine learning model for classifying samples.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Track_Number`: int, default=150
+  - Number of tracks to be considered
+- `Track_Quality`: bool, default=False
+  - If True, enables track-quality tier selection (Top/Mid/Bottom) via Track_Quality_Tier
+- `Track_Quality_Tier`: {"Top","Mid","Bottom"}, default="Top"
+  - Which quality tier to use when Track_Quality=True:
+    - `"Top"`: highest-quality tracks (default behavior)
+    - `"Good"`: The next N tracks by quality tracks after top
+    - `"Mid"`: middle N tracks by quality rank
+    - `"Bottom"`: lowest-quality tracks
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
+
+**Returns:**
+- `pandas.DataFrame`
+  - A single-row DataFrame containing the mean feature values for the top 150 tracks.
 
 #### 4.1.6 prediction_ML()
 
-CiliaTracks.prediction_ML(Tracks, Spots, Conversion=None)
+`CiliaTracks.prediction_ML(Tracks, Spots, Conversion=None)`
 
-Extracts features using track_ML and classifies the sample using a pre-trained XGBoost model.
+Extracts features using track_ML and classifies the sample using a pre-trained XGBoost model. The function prints the prediction ('Control' or 'PCD') and the model's confidence score.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
 
 #### 4.1.7 trajectory_CNN()
 
-CiliaTracks.trajectory_CNN(Tracks, Spots, Conversion=None)
+`CiliaTracks.trajectory_CNN(Tracks, Spots, Conversion=None)`
 
-Generates a standardized polar trajectory plot suitable as input for a Convolutional Neural Network (CNN).
+Generates a standardized polar trajectory plot suitable as input for a Convolutional Neural Network (CNN). The plot is minimalistic, with white trajectories on a black background, and all axes and labels removed.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
+
+**Returns:**
+- `matplotlib.figure.Figure`
+  - The figure object for the generated CNN input image.
 
 #### 4.1.8 prediction_CNN()
 
-CiliaTracks.prediction_CNN(Tracks, Spots, Conversion=None)
+`CiliaTracks.prediction_CNN(Tracks, Spots, Conversion=None)`
 
-Generates a trajectory image in memory and uses a pre-trained Convolutional Neural Network (CNN) to classify the sample.
+Generates a trajectory image in memory and uses a pre-trained Convolutional Neural Network (CNN) to classify the sample. The function prints the prediction ('Control' or 'PCD') and the model's confidence score.
+
+**Parameters:**
+- `Tracks`: str
+  - The file path to the track_statistics.csv file.
+- `Spots`: str
+  - The file path to the spots_statistics.csv file.
+- `Conversion`: float, int, or None, default None
+  - A unit conversion factor to apply to distance values. If None, no conversion is applied.
 
 ---
 
