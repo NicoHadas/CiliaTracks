@@ -110,7 +110,8 @@ This reference guide provides a detailed description of the core functions avail
 
 `CiliaTracks.converter(Tracks, Spots, Conversion)`
 
-Applies a unit conversion to TrackMate data and returns the converted data as CSV-formatted strings. This is useful for scaling distance-based measurements from pixels to a physical unit like micrometers.
+Applies a unit conversion to TrackMate data and returns the converted data as CSV-formatted strings. This is useful for scaling distance-based measurements from pixels to a physical unit like micrometers. This converts feature units in pixels to micrometers, making data more interpretable.
+
 
 **Parameters:**
 - `Tracks`: str
