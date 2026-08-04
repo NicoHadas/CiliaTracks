@@ -171,7 +171,13 @@ This repository includes a Jython script that automates the entire TrackMate ana
 
 If you use `CiliaTracks` in your research...
 
-## Data and Packaged Applications
+## Software archiving and data availability
+
+Each GitHub release is automatically archived through the 
+GitHub–Zenodo integration.
+
+Latest software archive:
+https://doi.org/10.5281/zenodo.21796426
 
 Raw TrackMate metrics, CNN input plots, and packaged Windows, macOS, and
 Linux applications are available through the associated Zenodo dataset:
