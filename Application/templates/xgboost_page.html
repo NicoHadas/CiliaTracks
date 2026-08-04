@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}XGBoost Prediction Tool{% endblock %}
+{% block content %}
+    <h1>XGBoost PCD Prediction Tool</h1>
+    <h2>A hyperparameter tuned XGBoost model that predicts PCD based off extracted and engineered features from bead movement propelled by cilia.</h2>
+
+    <div class="form-container" style="margin-bottom: 40px;">
+        <h3>Automated Prediction from CSV Files</h3>
+        <p style="color: #6c757d; font-size: 1.2em;"><strong>Upload TrackMate CSV files below to automatically generate features and receive a prediction.</strong></p>
+        {% if automated_error %}
+            <p style="color:red; margin:10px;">{{ automated_error }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('xgboost_page') }}" enctype="multipart/form-data">
+            <input type="hidden" name="form_type" value="automated">
+            <div class="form-inputs">
+                <label>Tracks CSV File:</label>
+                <input type="file" name="tracks_file" accept=".csv" required>
+                
+                <label>Spots CSV File:</label>
+                <input type="file" name="spots_file" accept=".csv" required>
+
+                <label>Pixel Conversion Factor (µm/pixel; Optional):</label>
+                <input type="number" step="any" name="conversion" placeholder="e.g., 0.65">
+            </div>
+            <div class="form-grid-submit" style="margin-top: 30px;">
+                <input type="submit" value="Analyze and Predict from CSVs">
+            </div>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h3>Manual Feature Input</h3>
+        <p style="color: #6c757d; font-size: 1.2em;">Alternatively, <strong>input feature values directly to generate a prediction.</strong> Values can be acquired from the <strong>Generate XGBoost Features</strong> function in the <strong>Manual CiliaTracks Analysis</strong> tab.</p>
+        {% if manual_error %}
+            <p style="color:red; margin:10px;">{{ manual_error }}</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('xgboost_page') }}">
+            <input type="hidden" name="form_type" value="manual">
+            <div class="form-grid">
+                <div><label>TRACK_DISPLACEMENT (µm):</label><input type="number" step="any" name="TRACK_DISPLACEMENT" required></div>
+                <div><label>TRACK_MEAN_SPEED (µm/frame):</label><input type="number" step="any" name="TRACK_MEAN_SPEED" required></div>
+                <div><label>TRACK_MAX_SPEED (µm/frame):</label><input type="number" step="any" name="TRACK_MAX_SPEED" required></div>
+                <div><label>TRACK_MIN_SPEED (µm/frame):</label><input type="number" step="any" name="TRACK_MIN_SPEED" required></div>
+                <div><label>TOTAL_DISTANCE_TRAVELED (µm):</label><input type="number" step="any" name="TOTAL_DISTANCE_TRAVELED" required></div>
+                <div><label>MAX_DISTANCE_TRAVELED (µm):</label><input type="number" step="any" name="MAX_DISTANCE_TRAVELED" required></div>
+                <div><label>CONFINEMENT_RATIO (unitless):</label><input type="number" step="any" name="CONFINEMENT_RATIO" required></div>
+                <div><label>MEAN_STRAIGHT_LINE_SPEED (µm/frame):</label><input type="number" step="any" name="MEAN_STRAIGHT_LINE_SPEED" required></div>
+                <div><label>LINEARITY_OF_FORWARD_PROGRESSION (unitless):</label><input type="number" step="any" name="LINEARITY_OF_FORWARD_PROGRESSION" required></div>
+                <div><label>MEAN_DIRECTIONAL_CHANGE_RATE (radians/frame):</label><input type="number" step="any" name="MEAN_DIRECTIONAL_CHANGE_RATE" required></div>
+                <div><label>CIRCULAR_VARIANCE (unitless):</label><input type="number" step="any" name="CIRCULAR_VARIANCE" required></div>
+                <div><label>PERCENT_IN_DENSEST_90 (%):</label><input type="number" step="any" name="PERCENT_IN_DENSEST_90" required></div>
+            </div>
+            <div class="form-grid-submit">
+                <input type="submit" value="Predict from Manual Input">
+            </div>
+        </form>
+    </div>
+{% endblock %}

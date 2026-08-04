@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Analysis Result{% endblock %}
+{% block content %}
+    <h1>{{ plot_title }}</h1>
+    
+    <div class="result-box" style="text-align: center;">
+        {% if plot_url %}
+            <img src="{{ plot_url }}" alt="{{ plot_title }}" class="result-image" style="max-width: 600px;">
+        {% endif %}
+        
+        {% if input_features %}
+            <h3>Generated Features:</h3>
+            <div class="table-container">
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for name, value, unit in input_features %}
+                            <tr>
+                                <td>{{ name }}</td>
+                                <td>{{ value }}</td>
+                                <td>{{ unit }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+    
+    <br>
+    <a href="{{ url_for('analysis_page') }}">Perform another analysis</a>
+{% endblock %}

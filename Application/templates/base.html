@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PCD Prediction{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-tabs">
+            <a href="{{ url_for('quick_summary_page') }}" class="{{ 'active' if request.endpoint == 'quick_summary_page' else '' }}">Quick Summary</a>
+            <a href="{{ url_for('analysis_page') }}" class="{{ 'active' if request.endpoint == 'analysis_page' else '' }}">Manual CiliaTracks Analysis</a>
+            <a href="{{ url_for('cnn_page') }}" class="{{ 'active' if request.endpoint == 'cnn_page' else '' }}">CNN Model</a>
+            <a href="{{ url_for('xgboost_page') }}" class="{{ 'active' if request.endpoint == 'xgboost_page' else '' }}">XGBoost Model</a>
+        </div>
+    </nav>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <p>Created by Nicholas Hadas</p>
+        <p class="dev-status">This is a demonstration tool and is currently in development.</p>
+    </footer>
+</body>
+</html>

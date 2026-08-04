@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Manual CiliaTracks Analysis{% endblock %}
+{% block content %}
+    <h1>Manual CiliaTracks Analysis</h1>
+    <h2><strong>Upload TrackMate CSV files below to generate angular plots and predictive features.</strong> Select ouputs can be used for downstream machine learning predictions available in the <strong>CNN Model</strong> and <strong>XGBoost Model</strong> tabs</h2>
+    
+    <div class="form-container">
+        {% if error %}
+            <p style="color: red; margin-top: 10px;">{{ error }}</p>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-inputs">
+                <label>Tracks CSV File:</label>
+                <input type="file" name="tracks_file" accept=".csv" required>
+                
+                <label>Spots CSV File:</label>
+                <input type="file" name="spots_file" accept=".csv" required>
+
+                <label>Pixel Conversion Factor (µm/pixel; Optional):</label>
+                <input type="number" step="any" name="conversion" placeholder="e.g., 0.65">
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button type="submit" name="action" value="trajectory">Generate Trajectory Plot</button>
+                <button type="submit" name="action" value="displacement">Generate Displacement Plot</button>
+                <button type="submit" name="action" value="speed">Generate Speed Plot</button>
+            </div>
+            <div style="margin-top: 20px;">
+                <button type="submit" name="action" value="cnn_input">Generate CNN Input Image</button>
+                <button type="submit" name="action" value="xgboost_features">Generate XGBoost Features</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="description-container">
+        <h2><strong>Function Descriptions</strong></h2>
+        <div class="description-item">
+            <strong>Trajectory Plot</strong>
+            <p>Generates a polar plot showing the full path of each particle track.</p>
+        </div>
+        <div class="description-item">
+            <strong>Displacement Plot</strong>
+            <p>Creates a polar plot where each particle track is represented by a single displacment vector.</p>
+        </div>
+        <div class="description-item">
+            <strong>Speed Plot</strong>
+            <p>Produces a polar plot of speed vectors.</p>
+        </div>
+        <div class="description-item">
+            <strong>CNN Input Image</strong>
+            <p>Generates a simplified, axis-free polar plot of trajectories specifically formatted as a direct input for the Convolutional Neural Network (CNN) model.</p>
+        </div>
+        <div class="description-item">
+            <strong>XGBoost Features</strong>
+            <p>Extracts key quantitative features from the track data and returns them as a single-row table for input into the XGBoost machine learning model.</p>
+        </div>
+    </div>
+    {% endblock %}

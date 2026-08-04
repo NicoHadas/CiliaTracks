@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result{% endblock %}
+{% block content %}
+    <h1>{{ model_type }} Model Prediction Result</h1>
+    
+    <div class="result-box">
+        <h2>Prediction: <strong class="{{ 'control' if prediction == 'Control' else '' }}">{{ prediction }}</strong></h2>
+        <p>Model Confidence: {{ "%.2f"|format(confidence) }}%</p>
+    </div>
+    
+    {% if image_url %}
+        <h3>Generated Image for Prediction:</h3>
+        <img src="{{ image_url }}" alt="Generated CNN Input" class="result-image">
+    {% elif image_filename %}
+        <h3>Submitted Image:</h3>
+        <img src="{{ url_for('uploaded_file', filename=image_filename) }}" alt="Uploaded Image" class="result-image">
+    {% endif %}
+    
+    {% if input_features %}
+        <h3>Submitted/Generated Features:</h3>
+        <table class="feature-table">
+            <tr><th>Feature</th><th>Value</th><th>Unit</th></tr>
+            {% for name, value, unit in input_features %}
+                <tr><td>{{ name }}</td><td>{{ value }}</td><td>{{ unit }}</td></tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    
+    <br>
+    <a href="{{ url_for('cnn_page') }}">Make another prediction</a>
+{% endblock %}
