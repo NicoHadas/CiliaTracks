@@ -19,7 +19,7 @@ This package provides the functions to analyze and visualize data from TrackMate
 
 * **Direct PCD Classification:** Make predictions on whether a sample is from a healthy control or a PCD patient using two pre-trained models: an XGBoost model for feature-based classification and a CNN for image-based classification.
 
-* **Automated Fiji ImageJ Script:** This repostiory contains a Jython script that automates the entire particle tracking analysis workflow 
+* **Automated Fiji ImageJ Script:** This repository contains a Jython script that automates the entire particle tracking analysis workflow 
 ---
 
 
@@ -123,7 +123,7 @@ CT.prediction_CNN(
 ```
 ---
 
-### Example Ouputs
+### Example Outputs
 
 <table border="0" cellspacing="0" cellpadding="10" align="center">
   <tr>
@@ -169,4 +169,11 @@ This repository includes a Jython script that automates the entire TrackMate ana
 
 ### How to Cite
 
-If you use `CiliaTracks` in your research, please cite our publication:
+If you use `CiliaTracks` in your research...
+
+## Data and Packaged Applications
+
+Raw TrackMate metrics, CNN input plots, and packaged Windows, macOS, and
+Linux applications are available through the associated Zenodo dataset:
+
+https://doi.org/10.5281/zenodo.19830056
