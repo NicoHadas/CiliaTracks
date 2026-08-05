@@ -182,4 +182,4 @@ https://doi.org/10.5281/zenodo.21796426
 Raw TrackMate metrics, CNN input plots, and packaged Windows, macOS, and
 Linux applications are available through the associated Zenodo dataset:
 
-https://doi.org/10.5281/zenodo.19830056
+https://doi.org/10.5281/zenodo.21811519
