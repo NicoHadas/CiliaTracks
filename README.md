@@ -169,7 +169,10 @@ This repository includes a Jython script that automates the entire TrackMate ana
 
 ### How to Cite
 
-If you use `CiliaTracks` in your research...
+If you use `CiliaTracks` in your research please cite our paper below:
+
+Hadas, N., et al. (2026). "Machine learning analysis of cilia driven particle transport distinguishes primary ciliary dyskinesia from normal cilia." Communications Biology.
+
 
 ## Software archiving and data availability
 
