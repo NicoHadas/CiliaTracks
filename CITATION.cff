@@ -1,0 +1,73 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: CiliaTracks
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Nicholas
+    family-names: Hadaš
+    email: hadasn@wustl.edu
+    affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA
+  - family-names: Xu
+    given-names: Huihui
+    affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA
+  - affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA
+    family-names: Neupane
+    given-names: Shambhawee
+  - given-names: Kyaw Twan
+    family-names: Wang
+    affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA
+  - affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA
+    given-names: Ahmed
+    family-names: Elgamal
+  - family-names: Andrew
+    given-names: Tilston-Lünel
+    affiliation: >-
+      Herman B. Wells Center for Pediatric Research, Indiana
+      University School of Medicine, Indianapolis, Indiana,
+      USA
+  - family-names: Mahjoub
+    given-names: Moe R.
+    affiliation: >-
+      Department of Medicine, Washington University School
+      of Medicine, St. Louis, Missouri, USA; Department of
+      Cell Biology and Physiology, Washington University
+      School of Medicine, St. Louis, Missouri, USA
+  - family-names: Horani
+    given-names: Amjad
+    affiliation: >-
+      Department of Pediatrics, Washington University School
+      of Medicine, St. Louis, Missouri, USA; Department of
+      Medicine, Washington University School of Medicine,
+      St. Louis, Missouri, USA
+abstract: >-
+  A set of computational tools for the visualization and
+  quantitative analysis of cilia-driven particle movement,
+  designed to process TrackMate data from high-speed video
+  microscopy of cultured airway cells.
+keywords:
+  - cilia
+  - ciliary motility
+  - particle tracking
+  - trajectory analysis
+  - TrackMate
+  - primary ciliary dyskinesia
+  - high-speed video microscopy
+  - machine learning
+license: GPL-3.0
+version: 1.1.6
+date-released: '2026-06-03'
